@@ -19,7 +19,7 @@ pos = unique(dat1.Position);
 dat2 = dat1(:,{'Length', 'Position', 'Total', 'Matches', 'Deletions', ...
     'Insertions'});
 
-dat2.Mismatches = dat2.Total - dat2.Matches;
+dat2.Mismatches = dat2.Total - dat2.Matches -dat2.Insertions - dat2.Deletions;
 dat3 = dat2;
 dat3.Mismatches = dat2.Mismatches./dat2.Total;
 dat3.Deletions = dat2.Deletions./dat2.Total;
@@ -32,8 +32,8 @@ posdat = zeros(length(pos),5);
 for  i = 1:length(pos)
     g = pos(i);
     subset = dat3(dat3.Position == g,:);
-    possum = mean(subset{:,5:8},1);
-    posdat(i,:) = [pos(i) possum];
+    posmean = mean(subset{:,5:8},1);
+    posdat(i,:) = [pos(i) posmean];
 end
 pos_all = array2table(posdat,'VariableNames',{'Position', 'Deletions', ...
     'Insertions','Mismatches','ErrorRate'});
@@ -44,8 +44,8 @@ lendat = zeros(length(lengths),5);
 for  i = 1:length(lengths)
     len = lengths(i);
     subset = dat3(dat3.Length == len,:);
-    lensum = mean(subset{:,5:8},1);
-    lendat(i,:) = [lengths(i) lensum];
+    lenmean = mean(subset{:,5:8},1);
+    lendat(i,:) = [lengths(i) lenmean];
 end
 length_all = array2table(lendat,'VariableNames',{'Length', 'Deletions', ...
     'Insertions','Mismatches','ErrorRate'});
